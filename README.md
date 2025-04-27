@@ -79,31 +79,35 @@ Admins, Companies or Participants must verify their email address before they ac
 ##### Registration and Login
 Upon Successful Registration a verification code is sent to the registered email, 
 for the purpose of this project and testing, this is sent as in verification link, 
-once click it verifies the user, and then 
+once clicked verifies the user, and then 
 the user is verified and can access all protected 'verified' protected routes.
 
 For Login, Once a successful login is triggered, a token is issued which is used to access the system 
 through the 'auth:sanctum'.
 
 ##### Companies API Routes
-Register [POST] => <code>/api/register</code>
-Login [POST] => <code>/api/login</code>
-Active Event Categories [GET] => <code>/companies/events-categories</code>
-Get Companies Events [GET] => <code>/companies/events</code>
-Add new Company Event [POST] => <code>/companies/events</code>
-Show an Event [GET] => <code>/companies/events/:eventId</code>
-Update an Event [PUT] => <code>/companies/events/:eventId</code>
-Delete an Event [DELETE] => <code>/companies/events/:eventId</code>
+<ul>
+    <li>Register [POST] => <code>/api/register</code></li>
+    <li>Login [POST] => <code>/api/login</code></li>
+    <li>Active Event Categories [GET] => <code>/companies/events-categories</code></li>
+    <li>Get Companies Events [GET] => <code>/companies/events</code></li>
+    <li>Add new Company Event [POST] => <code>/companies/events</code></li>
+    <li>Show an Event [GET] => <code>/companies/events/:eventId</code></li>
+    <li>Update an Event [PUT] => <code>/companies/events/:eventId</code></li>
+    <li>Delete an Event [DELETE] => <code>/companies/events/:eventId</code></li>
+</ul>
 
 ##### Participants API Routes
-Register [POST] => <code>/api/register</code>
-Login [POST] => <code>/api/login</code>
-Get Active Events [GET] => <code>/participants/events</code>
-Show an Event [GET] => <code>/participants/events/:eventId</code>
-Get Participants Registered Events [GET] => <code>/participants/events-registered</code>
-Register for an Event [POST] => <code>/participants/events/register</code>
-Participant View a Registered Event [GET] => <code>/participants/events-registered/:event</code>
-Delete Event Registration [DELETE] => <code>/participants/events-registered/:event</code>
+<ul>
+    <li>Register [POST] => <code>/api/register</code></li>
+    <li>Login [POST] => <code>/api/login</code></li>
+    <li>Get Active Events [GET] => <code>/participants/events</code></li>
+    <li>Show an Event [GET] => <code>/participants/events/:eventId</code></li>
+    <li>Get Participants Registered Events [GET] => <code>/participants/events-registered</code></li>
+    <li>Register for an Event [POST] => <code>/participants/events/register</code></li>
+    <li>Participant View a Registered Event [GET] => <code>/participants/events-registered/:event</code></li>
+    <li>Delete Event Registration [DELETE] => <code>/participants/events-registered/:event</code></li>
+</ul>
 
 ##### Used Middleware
 Two major middleware were used, and registered in the app.php inside the bootstrap folder
