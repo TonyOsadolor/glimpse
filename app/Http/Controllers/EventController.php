@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Events\CreateEventRequest;
 use App\Http\Requests\Events\UpdateEventRequest;
 use App\Http\Resources\EventResource;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Services\EventService;
@@ -39,6 +40,11 @@ class EventController extends Controller
      */
     public function store(CreateEventRequest $request)
     {
+        $response = Gate::inspect('create', \App\Models\Event::class);
+        if (!$response->allowed()) {
+            return Response::error(403, $response->message());
+        }
+
         $eventData = $request->validated();
         $company = Auth::user();
 
@@ -67,12 +73,19 @@ class EventController extends Controller
      */
     public function update(UpdateEventRequest $request, Event $event)
     {
-        $eventData = $request->validated();
+        $response = Gate::inspect('update', $event);
 
-        $event = $this->eventService->update($eventData, $event->id);
-        $eventResource = new EventResource($event);
+        if ($response->allowed()) {
+            $eventData = $request->validated();
 
-        return Response::success(201, 'Event Updated!', $eventResource);
+            $event = $this->eventService->update($eventData, $event->id);
+            $eventResource = new EventResource($event);
+
+            return Response::success(201, 'Event Updated!', $eventResource);
+
+        } else {
+            return Response::error(404, $response->message());
+        } 
     }
 
     /**
@@ -80,7 +93,15 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        $event = $this->eventService->delete($event->id);
-        return Response::success(200, 'Event Deleted!');        
+        $response = Gate::inspect('delete', $event);
+
+        if ($response->allowed()) {
+
+            $event = $this->eventService->delete($event->id);
+            return Response::success(200, 'Event Deleted!');
+
+        } else {
+            return Response::error(404, $response->message());
+        }                
     }
 }

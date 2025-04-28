@@ -26,7 +26,7 @@ class UpdateEventRequest extends FormRequest
     {
         return [
             'event_name' => [
-                'required',
+                'nullable',
                 'string',
                 Rule::unique('events')->where(function ($query) {
                     return $query->where('company_id', Auth::user()->id);

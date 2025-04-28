@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Events\RegisterEventRequest;
 use App\Http\Resources\RegisterEventResource;
 use App\Services\RegisterEventService;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\RegisterEvent;
@@ -38,6 +39,11 @@ class RegisterEventController extends Controller
      */
     public function store(RegisterEventRequest $request)
     {
+        $response = Gate::inspect('create', \App\Models\RegisterEvent::class);
+        if (!$response->allowed()) {
+            return Response::error(403, $response->message());
+        }
+
         $user = Auth::user();
         $eventData = $request->validated();
         
@@ -67,7 +73,15 @@ class RegisterEventController extends Controller
      */
     public function destroy(RegisterEvent $event)
     {
-        $event = $this->registerEventService->delete($event->id);
-        return Response::success(200, 'Event Registration Deleted!'); 
+        $response = Gate::inspect('delete', $event);        
+
+        if ($response->allowed()) {
+
+            $event = $this->registerEventService->delete($event->id);
+            return Response::success(200, 'Event Registration Deleted!');
+
+        } else {
+            return Response::error(404, $response->message());
+        }
     }
 }
