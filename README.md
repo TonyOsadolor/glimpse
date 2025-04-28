@@ -9,7 +9,7 @@ and manage events, with access for participants to register for events.
 
 - **Backend : PHP / Laravel**
 
-## Contribution Guide
+## Setup Guide
 ##### Setting up your workspace
 ##### Laravel Version => '12.10.2'
 Before running this app locally make sure you have the following software installed:
@@ -24,9 +24,12 @@ Now, follow this steps:
     <li>Open your terminal, navigate to your preferred folder and Run: <code>git clone https://github.com/TonyOsadolor/glimpse.git</code>.</li>
     <li>Run <code>composer install</code></li>
     <li>Copy all the contents of the <code>.env.example</code> file. Create <code>.env</code> file and paste all the contents you copied from <code>.env.exmaple</code> file to your <code>.env</code> file.</li>
-    <li>Run <code>php artisan key:generate --show</code> to retrieve a base64 encoded string for Laravel's APP_KEY in <code>.env</code></li>
+    <li>Run <code>php artisan key:generate --show</code> to retrieve a base64 encoded string; copy same and past in the Laravel's APP_KEY in <code>.env</code> or run <code>php artisan key:generate</code> to have the key generated and attach itself.</li>
     <li>Set your DB_DATABASE = <code>glimpse</code></li>
-    <li>If you are using XAMPP , run it as an administrator. Start Apache and Mysql. Go to <code>localhost/phpmyadmin</code> and create new database and name it <code>glimpse</code>.</li>
+    <li>If you are using XAMPP, run it as an administrator. Start Apache and Mysql. Go to <code>localhost/phpmyadmin</code> and create new database and name it <code>glimpse</code>.</li>
+    <li>If you use any other offline server client, simply setup your local database name <code>glimpse</code>.</li>
+    <li>Once you are done with the database set up, kindly run <code>php artisan migrate</code>.</li>
+    <li>When you are done migrating the tables, run <code>php artisan db:seed</code> to see the default record of Admin and Event Categories.</li>
     <li>Run php artisan serve from your terminal to start your local server at: <code>http://127.0.0.1:8000/</code> .</li>
 </ol>
 
@@ -44,6 +47,7 @@ Basic feature of the App built with Laravel Classes includes:
     <li>Services <code>for personal preference, I chose services class over repositories</code></li>
     <li>Traits <code>majoring the Response class for returning json responses</code></li>
     <li>Command <code>Make a new Command 'MakeServiceCommand' for handling the auto generation of Service Class</code></li>
+    <li>Policies <code>This handles security of Models to ensure the right access by owners</code></li>
 </ol>
 
 For the purpose of this project, since we are building an API platform I want 
@@ -79,8 +83,7 @@ Admins, Companies or Participants must verify their email address before they ac
 ##### Registration and Login
 Upon Successful Registration a verification code is sent to the registered email, 
 for the purpose of this project and testing, this is sent as in verification link, 
-once clicked verifies the user, and then 
-the user is verified and can access all protected 'verified' protected routes.
+once clicked it verifies the user, and then the user can access all 'verified' protected routes.
 
 For Login, Once a successful login is triggered, a token is issued which is used to access the system 
 through the 'auth:sanctum'.
@@ -97,6 +100,18 @@ through the 'auth:sanctum'.
     <li>Delete an Event [DELETE] => <code>/companies/events/:eventId</code></li>
 </ul>
 
+##### Registration for Companies
+The following fields are required for Company's Registration
+<ul>
+    <li>'first_name' => First Name</li>
+    <li>'last_name' => Last Name</li>
+    <li>'email' => unique email address for each user</li>
+    <li>'phone' => unique phone number for each user</li>
+    <li>'role' => role for company is filled with 'company'</li>
+    <li>'company_name' => for a company registration a Company Name is required.</li>
+    <li>'password' => to secure their account.</li>
+</ul>
+
 ##### Participants API Routes
 <ul>
     <li>Register [POST] => <code>/api/register</code></li>
@@ -108,6 +123,22 @@ through the 'auth:sanctum'.
     <li>Participant View a Registered Event [GET] => <code>/participants/events-registered/:event</code></li>
     <li>Delete Event Registration [DELETE] => <code>/participants/events-registered/:event</code></li>
 </ul>
+
+##### Registration for Participants
+The following fields are required for Participant's Registration
+<ul>
+    <li>'first_name' => First Name</li>
+    <li>'last_name' => Last Name</li>
+    <li>'email' => unique email address for each user</li>
+    <li>'phone' => unique phone number for each user</li>
+    <li>'role' => role for participant is filled with 'participant'</li>
+    <li>'password' => to secure their account.</li>
+</ul>
+
+##### Login For All
+Since we are using same route for login all that is required is:
+ - Email address registered on the system
+ - Password to the account provided
 
 ##### Used Middleware
 Two major middleware were used, and registered in the app.php inside the bootstrap folder
@@ -125,6 +156,9 @@ Two major middleware were used, and registered in the app.php inside the bootstr
 ##### Resource Calss
 This ensure a more modest way of returning model data for a better organization 
 and easy accessibility by the FE
+
+##### Model Policies
+This helps to restrict access to only owners of record for CRUD operations
 
 ## License
 
